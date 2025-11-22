@@ -28,7 +28,9 @@ namespace ASC_ode
     : TimeStepper(rhs), m_vecf(rhs->dimF()) {}
     void DoStep(double tau, VectorView<double> y) override
     {
+      //evaluate f at y(i)
       this->m_rhs->evaluate(y, m_vecf);
+      //update y(i+1) = y(i) + tau*f(y(i))
       y += tau * m_vecf;
     }
   };
@@ -52,6 +54,26 @@ namespace ASC_ode
       m_yold->set(y);
       m_tau->set(tau);
       NewtonSolver(m_equ, y);
+    }
+  };
+
+  /**
+   * @brief Ex. 17.2.2. Improved Euler time stepping method impelemtation 
+   */
+  class ImprovedEuler : public TimeStepper
+  {
+    Vector<> m_vecf;
+    Vector<> y_tmp;
+
+  public:
+    ImprovedEuler(std::shared_ptr<NonlinearFunction> rhs) 
+    : TimeStepper(rhs), m_vecf(rhs->dimF()) {}
+    void DoStep(double tau, VectorView<double> y) override
+    {
+      this->m_rhs->evaluate(y, m_vecf);
+      y_tmp= y + (tau/2) * m_vecf;
+      this->m_rhs->evaluate(y_tmp, m_vecf);
+      y += (tau) * m_vecf;
     }
   };
 
