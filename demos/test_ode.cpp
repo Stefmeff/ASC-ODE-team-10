@@ -36,6 +36,33 @@ public:
   }
 };
 
+//TODO: Exercise 17.4.1
+class  ElectricNetwork : public NonlinearFunction
+{
+private:
+  //TODO Ersezten
+  double Resistance;
+  double Capacitance;
+
+public:
+  MassSpring(double m, double k) : mass(m), stiffness(k) {}
+
+  size_t dimX() const override { return 2; }
+  size_t dimF() const override { return 2; }
+  
+  void evaluate (VectorView<double> x, VectorView<double> f) const override
+  {
+    f(0) = x(1);
+    f(1) = -stiffness/mass*x(0);
+  }
+  
+  void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
+  {
+    df = 0.0;
+    df(0,1) = 1;
+    df(1,0) = -stiffness/mass;
+  }
+};
 
 int main(int argc, char** argv)
 {
@@ -77,6 +104,46 @@ int main(int argc, char** argv)
   int steps[] = {50, 100, 150, 200};
 
 
+      Vector<> Radau(3), RadauWeight(3);
+      GaussRadau (Radau, RadauWeight);
+      // not sure about weights, comput them via ComputeABfromC
+      std::cout << "Radau = " << Radau << ", weight = " << RadauWeight <<  std::endl;
+      
+      Vector<> Gauss2c(2), Gauss3c(3);
+    
+    
+
+    ExplicitEuler stepper(rhs);
+    ImplicitEuler stepper(rhs);
+
+    RungeKutta stepper(rhs, Gauss2a, Gauss2b, Gauss2c);
+
+    // Gauss3c .. points tabulated, compute a,b:
+    //auto [Gauss3a,Gauss3b] = ComputeABfromC (Gauss3c);
+    //ImplicitRungeKutta stepper(rhs, Gauss3a, Gauss3b, Gauss3c);
+
+
+    /*
+    // arbitrary order Gauss-Legendre
+    int stages = 5;
+    Vector<> c(stages), b1(stages);
+    GaussLegendre(c, b1);
+
+    auto [a, b] = ComputeABfromC(c);
+    ImplicitRungeKutta stepper(rhs, a, b, c);
+    */
+
+    /* 
+    // arbitrary order Radau
+    int stages = 5;
+    Vector<> c(stages), b1(stages);
+    GaussRadau(c, b1);
+
+    auto [a, b] = ComputeABfromC(c);
+    ImplicitRungeKutta stepper(rhs, a, b, c);
+    */
+
+
   for (int s : steps){
 
     double tau = tend/s;
@@ -86,56 +153,20 @@ int main(int argc, char** argv)
     std::ofstream outfile (path + "steps" + std::to_string(s) + ".txt");
 
 
-    /*
-      Vector<> Radau(3), RadauWeight(3);
-      GaussRadau (Radau, RadauWeight);
-      // not sure about weights, comput them via ComputeABfromC
-      cout << "Radau = " << Radau << ", weight = " << RadauWeight <<  endl;
-            Vector<> Gauss2c(2), Gauss3c(3);
-    */
     
 
-      // ExplicitEuler stepper(rhs);
-      // ImplicitEuler stepper(rhs);
-
-      // RungeKutta stepper(rhs, Gauss2a, Gauss2b, Gauss2c);
-
-      // Gauss3c .. points tabulated, compute a,b:
-      auto [Gauss3a,Gauss3b] = ComputeABfromC (Gauss3c);
-      ImplicitRungeKutta stepper(rhs, Gauss3a, Gauss3b, Gauss3c);
 
 
-      /*
-      // arbitrary order Gauss-Legendre
-      int stages = 5;
-      Vector<> c(stages), b1(stages);
-      GaussLegendre(c, b1);
+    //std::cout << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
+    outfile << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
 
-      auto [a, b] = ComputeABfromC(c);
-      ImplicitRungeKutta stepper(rhs, a, b, c);
-      */
+    for (int i = 0; i < s; i++)
+    {
+      stepper->DoStep(tau, y);
 
-      /* 
-      // arbitrary order Radau
-      int stages = 5;
-      Vector<> c(stages), b1(stages);
-      GaussRadau(c, b1);
-
-      auto [a, b] = ComputeABfromC(c);
-      ImplicitRungeKutta stepper(rhs, a, b, c);
-      */
-
-
-      std::cout << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
-      outfile << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
-
-      for (int i = 0; i < s; i++)
-      {
-        stepper->DoStep(tau, y);
-
-        std::cout << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
-        outfile << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
-      }
+      //std::cout << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
+      outfile << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
+    }
   }
 
 
