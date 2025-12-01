@@ -40,7 +40,7 @@ public:
 class ElectricNetwork : public NonlinearFunction
 {
 private:
-    // Renamed variables
+    //  variables
     double resistance;
     double capacitance;
     double angularFrequency; 
@@ -64,7 +64,7 @@ public:
         double t  = x(1); // Time
         
         // dUc/dt = (1/RC) * (U0(t) - Uc)
-        // Using the new variable names here:
+        
         f(0) = (1.0 / (resistance * capacitance)) * (std::cos(angularFrequency * t) - Uc);
         
         // dt/dt = 1
