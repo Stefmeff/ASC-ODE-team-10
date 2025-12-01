@@ -36,6 +36,62 @@ public:
   }
 };
 
+//TODO: Exercise 17.4.1
+class ElectricNetwork : public NonlinearFunction
+{
+private:
+    //  variables
+    double resistance;
+    double capacitance;
+    double angularFrequency; 
+
+public:
+    // Constructor
+    ElectricNetwork(double R, double C) 
+        : resistance(R), capacitance(C) 
+    {
+        // 100 * PI is the angular frequency (omega)
+        angularFrequency = 100.0 * M_PI;
+    }
+
+    size_t dimX() const override { return 2; }
+    size_t dimF() const override { return 2; }
+    
+    // f(x)
+    void evaluate (VectorView<double> x, VectorView<double> f) const override
+    {
+        double Uc = x(0); // Voltage
+        double t  = x(1); // Time
+        
+        // dUc/dt = (1/RC) * (U0(t) - Uc)
+        
+        f(0) = (1.0 / (resistance * capacitance)) * (std::cos(angularFrequency * t) - Uc);
+        
+        // dt/dt = 1
+        f(1) = 1.0; 
+    }
+    
+    // Jacobian J = df/dx
+    void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
+    {
+        double t = x(1);
+        
+        // Use new names for calculation
+        double rc_inv = 1.0 / (resistance * capacitance);
+
+        df = 0.0;
+
+        // d(f0)/d(x0) -> d(U'c)/dUc = -1/RC
+        df(0,0) = -rc_inv;
+        
+        // d(f0)/d(x1) -> d(U'c)/dt  = (1/RC) * (-omega * sin(omega*t))
+        df(0,1) = rc_inv * (-angularFrequency * std::sin(angularFrequency * t));
+
+        // d(f1)/... -> derivatives of 1 are 0
+        df(1,0) = 0.0;
+        df(1,1) = 0.0;
+    }
+};
 
 int main(int argc, char** argv)
 {
