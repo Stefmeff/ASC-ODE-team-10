@@ -96,6 +96,11 @@ namespace ASC_ode
        return result;
    }
 
+  // Multiplication operator (double * auto-diff)
+  template <size_t N, typename T = double>
+  auto operator* (T a, const AutoDiff<N, T>& b) { return AutoDiff<N, T>(a) * b; }
+
+
   //TODO: Exercise 18.4 Add some additional useful operators:
 
    // Division operator (auto-diff / auto-diff)
@@ -183,6 +188,8 @@ namespace ASC_ode
     {
       return pow(a, T(0.5));
     }
+
+
 
 
 
