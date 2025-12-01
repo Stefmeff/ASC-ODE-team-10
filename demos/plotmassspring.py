@@ -6,19 +6,19 @@ data = []
 for steps in [50, 100, 150, 200]:
     
 
-    filename1 = f'../outputs/ExplicitEuler/steps{steps}.txt'
-    filename2 = f'../outputs/ImprovedEuler/steps{steps}.txt'
-    filename3 = f'../outputs/ImplicitEuler/steps{steps}.txt'
-    filename4 = f'../outputs/CrankNicolson/steps{steps}.txt'
-    filename5 = f'../outputs/RungeKutta/steps{steps}.txt'
-    filename6 = f'../outputs/ImplicitRungeKutta/steps{steps}.txt'
+    filename1 = f'../outputs/MassSpring/ExplicitEuler/steps{steps}.txt'
+    filename2 = f'../outputs/MassSpring/ImprovedEuler/steps{steps}.txt'
+    filename3 = f'../outputs/MassSpring/ImplicitEuler/steps{steps}.txt'
+    filename4 = f'../outputs/MassSpring/CrankNicolson/steps{steps}.txt'
+    filename5 = f'../outputs/MassSpring/RungeKutta/steps{steps}.txt'
+    #  filename6 = f'../outputs/ImplicitRungeKutta/steps{steps}.txt'
     d1 = np.loadtxt(filename1, usecols=(0, 1, 2))
     d2 = np.loadtxt(filename2, usecols=(0, 1, 2))
     d3 = np.loadtxt(filename3, usecols=(0, 1, 2))
     d4 = np.loadtxt(filename4, usecols=(0, 1, 2))
     d5 = np.loadtxt(filename5, usecols=(0, 1, 2))
-    d6 = np.loadtxt(filename6, usecols=(0, 1, 2))
-    data = [d1, d2, d3, d4, d5, d6]
+    # d6 = np.loadtxt(filename6, usecols=(0, 1, 2))
+    data = [d1, d2, d3, d4, d5]
 
 
     import matplotlib.pyplot as plt
@@ -38,7 +38,7 @@ for steps in [50, 100, 150, 200]:
 
     # Plot Runge Kutta methods
     plt.plot(data[4][:,0], data[4][:,1], label='position-Explicit Runge Kutta')
-    plt.plot(data[5][:,0], data[5][:,1], label='position-Implicit Runge Kutta')
+    # plt.plot(data[5][:,0], data[5][:,1], label='position-Implicit Runge Kutta')
     plt.xlabel('time')
     plt.ylabel('value')
     plt.title('Mass-Spring System Time Evolution')
@@ -63,7 +63,7 @@ for steps in [50, 100, 150, 200]:
 
     # Plot Runge Kutta methods phase plot
     plt.plot(data[4][:,1], data[4][:,2], label='phase plot-Explicit Runge Kutta')
-    plt.plot(data[5][:,1], data[5][:,2], label='phase plot-Implicit Runge Kutta')
+    # plt.plot(data[5][:,1], data[5][:,2], label='phase plot-Implicit Runge Kutta')
     plt.xlabel('position')
     plt.ylabel('velocity') 
     plt.title('Mass-Spring System Phase Plot')

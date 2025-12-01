@@ -95,17 +95,31 @@ public:
 
 int main(int argc, char** argv)
 {
-  //Read command line argument: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson
+  //TODO: 17, 18 done, 19 pending
 
+  //Read command line argument: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson
+  std::string system;
   std::string method;
-  if (argc > 1) {
-      method = argv[1];
+  if (argc ==3 ) {
+      system = argv[1];
+      method = argv[2];
+  } else if (argc == 2 ) {
+      system = argv[1];
+      method = "ExplicitEuler"; // default method
   } else {
+      system = "MassSpring"; // default system
       method = "ExplicitEuler"; // default method
   }
 
-  // create the ODE right-hand side
-  auto rhs = std::make_shared<MassSpring>(1.0, 1.0);
+  //Select System: Electrical vs Mechanical
+  std::shared_ptr<NonlinearFunction> rhs;
+  if(system == "ElectricNetwork") {
+    std::cout << "Using Electric Network System" << std::endl;
+    rhs = std::make_shared<ElectricNetwork>(1.0,1.0); // R=1kOhm, C=1uF
+  }else{
+    std::cout << "Using Mass-Spring System" << std::endl;
+    rhs = std::make_shared<MassSpring>(1.0, 1.0);
+  }
 
   std::unique_ptr<TimeStepper> stepper;
   std::string path;
@@ -125,32 +139,33 @@ int main(int argc, char** argv)
   auto [a, b] = ComputeABfromC(c);
 
 
+  // Select Time Stepping Method
   if (method=="ImprovedEuler") 
   {
     std::cout << "Using Improved Euler Method" << std::endl;
     stepper = std::make_unique<ImprovedEuler>(rhs);
-    path = "../outputs/ImprovedEuler/";
+    path = "../outputs/" + system + "/ImprovedEuler/";
   } else if (method=="CrankNicolson") {
     std::cout << "Using Crank-Nicolson Method" << std::endl;
     stepper = std::make_unique<CrankNicolson>(rhs);
-    path = "../outputs/CrankNicolson/";
+    path = "../outputs/" + system + "/CrankNicolson/";
   } else if (method=="ImplicitEuler") {     
     std::cout << "Using Implicit Euler Method" << std::endl;
     stepper = std::make_unique<ImplicitEuler>(rhs);
-    path = "../outputs/ImplicitEuler/";
+    path = "../outputs/" + system + "/ImplicitEuler/";
   } else if(method == "RungeKutta") {
     std::cout << "Using Runge Kutta Method: " << path << std::endl;
     stepper = std::make_unique<RungeKutta>(rhs, Gauss2a, Gauss2b, Gauss2c);
-    path = "../outputs/RungeKutta/";
+    path = "../outputs/" + system + "/RungeKutta/";
   } else if(method=="ImplicitRungeKutta") {
     std::cout << "Using Implicit Runge Kutta: " << path << std::endl;
     auto [Gauss3a,Gauss3b] = ComputeABfromC (Gauss3c);
     stepper = std::make_unique<ImplicitRungeKutta>(rhs, Gauss3a, Gauss3b, Gauss3c);
-    path = "../outputs/ImplicitRungeKutta/";
+    path = "../outputs/" + system + "/ImplicitRungeKutta/";
   } else {
     std::cout << "Using Explicit Euler Method" << std::endl;
     stepper = std::make_unique<ExplicitEuler>(rhs);
-    path = "../outputs/ExplicitEuler/";
+    path = "../outputs/" + system + "/ExplicitEuler/";
   } 
 
   double tend = 4*M_PI;
