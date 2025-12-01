@@ -95,12 +95,21 @@ public:
 
 int main(int argc, char** argv)
 {
-  //TODO: 17, 18 done, 19 pending
+  // Usage: ./test_ode [System] [Method] [num_stages]
+  // System: MassSpring, ElectricNetwork
+  // Method: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson, RungeKutta, ImplicitRungeKutta
+  // For ImplicitRungeKutta, num_stages specifies the number of stages
 
   //Read command line argument: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson
   std::string system;
   std::string method;
-  if (argc ==3 ) {
+  int num_stages = 2; // default number of stages for RK methods
+
+  if (argc == 4 ) {
+      system = argv[1];
+      method = argv[2];
+      num_stages = std::stoi(argv[3]);
+  } else if (argc = 3 ) {
       system = argv[1];
       method = argv[2];
   } else if (argc == 2 ) {
@@ -130,13 +139,34 @@ int main(int argc, char** argv)
   std::cout << "Radau = " << Radau << ", weight = " << RadauWeight <<  std::endl;
 
   // Initialize Butcher tableaux for Gauss methods
-  Vector<> Gauss2c(2), Gauss3c(3);
+  //Vector<> Gauss2c(2), Gauss3c(3);
 
-  // arbitrary order Gauss-LegendreR
-  int stages = 5;
-  Vector<> c(stages), b1(stages);
-  GaussLegendre(c, b1);
-  auto [a, b] = ComputeABfromC(c);
+  Matrix<> a(num_stages, num_stages);
+  Vector<> b(num_stages), c(num_stages);
+  if(num_stages == 2) {
+    auto [Gauss_2a, Gauss_2b] = ComputeABfromC(Gauss2c);
+    std::cout << "Gauss2c = " << Gauss2c << ", b = " << Gauss_2b << ", a = " << Gauss_2a << std::endl;
+    a = Gauss_2a;
+    b = Gauss_2b;
+    c = Gauss2c;
+
+  } else if(num_stages == 3) {
+    auto [Gauss_3a, Gauss_3b] = ComputeABfromC(Gauss3c);
+    std::cout << "Gauss3c = " << Gauss3c << ", b = " << Gauss_3b << ", a = " << Gauss_3a << std::endl;
+    a = Gauss_3a;
+    b = Gauss_3b;
+    c = Gauss3c;
+  } else {
+    //arbitrary order Gauss-Legendre
+    Vector<> b1(num_stages);
+    GaussLegendre(c, b1);
+    auto [a_temp, b_temp] = ComputeABfromC(c);
+    std::cout << "GaussLegendre c = " << c << ", b = " << b_temp << ", a = " << a_temp << std::endl;
+    a = a_temp;
+    b = b_temp;
+  }
+ 
+
 
 
   // Select Time Stepping Method
@@ -153,15 +183,15 @@ int main(int argc, char** argv)
     std::cout << "Using Implicit Euler Method" << std::endl;
     stepper = std::make_unique<ImplicitEuler>(rhs);
     path = "../outputs/" + system + "/ImplicitEuler/";
-  } else if(method == "RungeKutta") {
+  } else if(method == "ExpRungeKutta") {
     std::cout << "Using Runge Kutta Method: " << path << std::endl;
-    stepper = std::make_unique<RungeKutta>(rhs, Gauss2a, Gauss2b, Gauss2c);
-    path = "../outputs/" + system + "/RungeKutta/";
-  } else if(method=="ImplicitRungeKutta") {
+    stepper = std::make_unique<RungeKutta>(rhs, a, b, c);
+    path = "../outputs/" + system + "/ExplicitRungeKutta/stages:" + std::to_string(num_stages);
+  } else if(method=="ImpRungeKutta") {
     std::cout << "Using Implicit Runge Kutta: " << path << std::endl;
     auto [Gauss3a,Gauss3b] = ComputeABfromC (Gauss3c);
-    stepper = std::make_unique<ImplicitRungeKutta>(rhs, Gauss3a, Gauss3b, Gauss3c);
-    path = "../outputs/" + system + "/ImplicitRungeKutta/";
+    stepper = std::make_unique<ImplicitRungeKutta>(rhs, a, b, c);
+    path = "../outputs/" + system + "/ImplicitRungeKutta/stages:" + std::to_string(num_stages);
   } else {
     std::cout << "Using Explicit Euler Method" << std::endl;
     stepper = std::make_unique<ExplicitEuler>(rhs);
@@ -201,12 +231,7 @@ int main(int argc, char** argv)
     double tau = tend/s;
 
     Vector<> y = { 1, 0 };  // initializer list
-    auto rhs = std::make_shared<MassSpring>(1.0, 1.0);
-    std::ofstream outfile (path + "steps" + std::to_string(s) + ".txt");
-
-
-    
-
+    std::ofstream outfile (path + "steps:" + std::to_string(s) + ".txt");
 
 
     //std::cout << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
