@@ -1,5 +1,7 @@
 #include <iostream>
 #include <autodiff.hpp>
+#include <vector>
+#include <fstream>
 
 
 using namespace ASC_ode;
@@ -12,6 +14,21 @@ T func1 (T x, T y)
   // return 1e6 + y;
 }
 
+// TODO: Exercise 18.4 Add Legengre Polynomials
+template <typename T>
+void LegendrePolynomials(int n, T x, std::vector<T>& P) {
+  if (n < 0) {
+      P.clear();
+      return;
+  }
+  P.resize(n + 1);
+  P[0] = T(1);
+  if (n == 0) return;
+  P[1] = x;
+  for (int k = 2; k <= n; ++k) {
+      P[k] = ((T(2 * k - 1) * x * P[k - 1]) - T(k - 1) * P[k - 2]) / T(k);
+  }
+}
 
 
 int main()
@@ -44,5 +61,26 @@ int main()
 
     // std::cout << "sin(addx) = " << sin(addx) << std::endl;
   }
+
+  {
+    //TODO: Exercise 18.4 Evaluate Legendre Polynomials
+    //Evaluate Legendre Polynimials up to Order 5 in Interval [-1,1]
+
+    //Create Output File for the Polynomials
+
+    std::ofstream outfile("../outputs/Legendre/legendre_polynomials.txt");
+    for (double x = -1.0; x <= 1.0; x += 0.01) {
+        AutoDiff<1> adx = Variable<0>(x);
+        std::vector<AutoDiff<1>> P;
+        LegendrePolynomials(5, adx, P);
+        outfile << x;
+        for (size_t i=0; i<P.size(); ++i) {
+            outfile << "," << P[i].value() << "," << P[i].deriv()[0];
+        }
+        outfile << "\n";
+    }
+    outfile.close();
+  }
+  
   return 0;
 }
