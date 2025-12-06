@@ -211,7 +211,7 @@ int main(int argc, char** argv)
   Vector<> c(stages), b1(stages);
   GaussLegendre(c, b1);
 
-  auto [a, b] = ComputeABfromC(c);
+  auto [a, b] = computeABfromC(c);
   ImplicitRungeKutta stepper(rhs, a, b, c);
   */
 
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
   Vector<> c(stages), b1(stages);
   GaussRadau(c, b1);
 
-  auto [a, b] = ComputeABfromC(c);
+  auto [a, b] = computeABfromC(c);
   ImplicitRungeKutta stepper(rhs, a, b, c);
   */
 

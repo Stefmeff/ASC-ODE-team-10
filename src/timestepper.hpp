@@ -17,7 +17,7 @@ namespace ASC_ode
   public:
     TimeStepper(std::shared_ptr<NonlinearFunction> rhs) : m_rhs(rhs) {}
     virtual ~TimeStepper() = default;
-    virtual void DoStep(double tau, VectorView<double> y) = 0;
+    virtual void doStep(double tau, VectorView<double> y) = 0;
   };
 
   class ExplicitEuler : public TimeStepper
@@ -26,7 +26,7 @@ namespace ASC_ode
   public:
     ExplicitEuler(std::shared_ptr<NonlinearFunction> rhs) 
     : TimeStepper(rhs), m_vecf(rhs->dimF()) {}
-    void DoStep(double tau, VectorView<double> y) override
+    void doStep(double tau, VectorView<double> y) override
     {
       //evaluate f at y(i)
       this->m_rhs->evaluate(y, m_vecf);
@@ -49,7 +49,7 @@ namespace ASC_ode
       m_equ = ynew - m_yold - m_tau * m_rhs;
     }
 
-    void DoStep(double tau, VectorView<double> y) override
+    void doStep(double tau, VectorView<double> y) override
     {
       m_yold->set(y);
       m_tau->set(tau);
