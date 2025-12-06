@@ -144,14 +144,14 @@ int main(int argc, char** argv)
   Matrix<> a(num_stages, num_stages);
   Vector<> b(num_stages), c(num_stages);
   if(num_stages == 2) {
-    auto [Gauss_2a, Gauss_2b] = ComputeABfromC(Gauss2c);
+    auto [Gauss_2a, Gauss_2b] = computeABfromC(Gauss2c);
     std::cout << "Gauss2c = " << Gauss2c << ", b = " << Gauss_2b << ", a = " << Gauss_2a << std::endl;
     a = Gauss_2a;
     b = Gauss_2b;
     c = Gauss2c;
 
   } else if(num_stages == 3) {
-    auto [Gauss_3a, Gauss_3b] = ComputeABfromC(Gauss3c);
+    auto [Gauss_3a, Gauss_3b] = computeABfromC(Gauss3c);
     std::cout << "Gauss3c = " << Gauss3c << ", b = " << Gauss_3b << ", a = " << Gauss_3a << std::endl;
     a = Gauss_3a;
     b = Gauss_3b;
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
     //arbitrary order Gauss-Legendre
     Vector<> b1(num_stages);
     GaussLegendre(c, b1);
-    auto [a_temp, b_temp] = ComputeABfromC(c);
+    auto [a_temp, b_temp] = computeABfromC(c);
     std::cout << "GaussLegendre c = " << c << ", b = " << b_temp << ", a = " << a_temp << std::endl;
     a = a_temp;
     b = b_temp;
@@ -189,7 +189,7 @@ int main(int argc, char** argv)
     path = "../outputs/" + system + "/ExplicitRungeKutta/stages:" + std::to_string(num_stages);
   } else if(method=="ImpRungeKutta") {
     std::cout << "Using Implicit Runge Kutta: " << path << std::endl;
-    auto [Gauss3a,Gauss3b] = ComputeABfromC (Gauss3c);
+    auto [Gauss3a,Gauss3b] = computeABfromC (Gauss3c);
     stepper = std::make_unique<ImplicitRungeKutta>(rhs, a, b, c);
     path = "../outputs/" + system + "/ImplicitRungeKutta/stages:" + std::to_string(num_stages);
   } else {
@@ -239,12 +239,16 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < s; i++)
     {
-      stepper->DoStep(tau, y);
+      stepper->doStep(tau, y);
 
       //std::cout << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
       outfile << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
     }
   }
 
+  //TODOS:
+  // build and run examples in mass_spring directory
+  // understand the setup
+  // add distance constraints to the MassSrping system => Enforce using Lagrange Multipliers???
 
 }

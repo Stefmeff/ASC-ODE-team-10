@@ -26,7 +26,7 @@ namespace ASC_ode {
     m_stages(c.size()), m_n(rhs->dimX()), m_k(m_stages*m_n), m_y(m_stages*m_n)
     { }   
 
-    void DoStep(double tau, VectorView<double> y) override
+    void doStep(double tau, VectorView<double> y) override
     {
       // Initialize stage values with current y
       for (int j = 0; j < m_stages; j++)
@@ -218,7 +218,7 @@ void GaussJacobi (VectorView<> x, VectorView<> w, const double alf, const double
 /*
   given Runge-Kutta nodes c, compute the coefficients a and b
 */
-auto computeABfromC (const Vector<> & c)
+auto computeABfromC (const Vector<>& c)
 {
   int s = c.size();
   Matrix<> M(s, s);
