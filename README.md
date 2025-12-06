@@ -17,8 +17,8 @@ The repository contains:
 
 We are **Team 10**.
 
-- *Stephan* – `<email1@tuwien.ac.at>`
-- *Jan* – `<email2@tuwien.ac.at>`
+- *Stefan Moser* – `<e12025955@tuwien.ac.at>`
+- *Jan Pup Csongor* – `<email2@tuwien.ac.at>`
 - *Adam Moritz Rasched* – `<e01644619@student.tuwien.ac.at>`
 
 (#TODO Replace `email1`, `email2` )
