@@ -2,7 +2,7 @@
 
 A C++ package for solving ordinary differential equations (ODEs), developed in the context of the Numerical Simulation and Scientific Computing I course by Prof. Joachim Schöberl at TU Wien.
 
-This repository is a **Team 10 fork** of the upstream project [ASC-ODE](https://github.com/TUWien-ASC/ASC-ODE). 
+This repository is a **Team 10 fork** of the upstream project [ASC-ODE](https://morasched.github.io/intro.html). 
 
 The repository contains:
 
