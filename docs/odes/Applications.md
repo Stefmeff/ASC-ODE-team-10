@@ -53,9 +53,9 @@ where **R** is the resistance, **C** is the capacitance, and $U_0(t)$ is the inp
 
 $$\frac{dU_C}{dt} = \frac{1}{RC}(U_0(t) - U_C(t))$$
 
-<p align="center">
+
 <img src="plots/ElectricCircuit/RC_Circuit.png" width="30%" style="display:block; margin:auto;">
-</p>
+
 
 
 The system is implemented in `demos/test_ode.cpp` as the `ElectricNetwork` class. Parameters are set to $R=C=1$ and the input voltage is $U_0(t) = \cos(100\pi t)$. Since the RC-circuit implements a low pass filter, we expect high-frequent input signals to decrease in amplitude at the output. We simulate the systems behaviour again by calling:
