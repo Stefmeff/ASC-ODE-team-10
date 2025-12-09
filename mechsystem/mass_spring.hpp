@@ -262,12 +262,10 @@ virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const ov
 
     auto xmat = x.asMatrix(nMass, D);
 
-    // Zero the Jacobian
+    // Zero Jacobian
     df = 0.0;
 
-    // -------------------------------
     // 1. Spring contributions
-    // -------------------------------
     for (const auto& spring : mss.springs())
     {
         auto [c1, c2] = spring.connectors;
@@ -277,16 +275,17 @@ virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const ov
 
         Vec<D> diff = p2 - p1;
         double dist = norm(diff);
-        if (dist < 1e-12) continue;  // avoid division by zero
+        if (dist < 1e-12) continue;
 
-        Vec<D> dir = (1.0 / dist) * diff;  // direction vector (scalar on left!)
+        Vec<D> dir = (1.0 / dist) * diff;
 
-        // Compute K = spring stiffness matrix (D x D)
+        double k = spring.stiffness;
+
+        // Compute stiffness matrix K (D x D)
         double K[D][D];
         for (int a = 0; a < D; ++a)
             for (int b = 0; b < D; ++b)
-                K[a][b] = spring.stiffness * ((dist - spring.length) / dist * (a == b ? 1.0 : 0.0)
-                                              + dir.data()[a] * dir.data()[b]);
+                K[a][b] = k * ((dist - spring.length) / dist * (a == b ? 1.0 : 0.0) + dir(a) * dir(b));
 
         if (c1.type == Connector::MASS)
         {
@@ -297,17 +296,17 @@ virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const ov
                 for (int a = 0; a < D; ++a)
                     for (int b = 0; b < D; ++b)
                     {
-                        df(i*D+a, j*D+b) -= K[a][b] / mss.masses()[i].mass;
-                        df(i*D+a, i*D+b) += K[a][b] / mss.masses()[i].mass;
-                        df(j*D+a, i*D+b) -= K[a][b] / mss.masses()[j].mass;
-                        df(j*D+a, j*D+b) += K[a][b] / mss.masses()[j].mass;
+                        df(i*D + a, j*D + b) -= K[a][b] / mss.masses()[i].mass;
+                        df(i*D + a, i*D + b) += K[a][b] / mss.masses()[i].mass;
+                        df(j*D + a, i*D + b) -= K[a][b] / mss.masses()[j].mass;
+                        df(j*D + a, j*D + b) += K[a][b] / mss.masses()[j].mass;
                     }
             }
             else
             {
                 for (int a = 0; a < D; ++a)
                     for (int b = 0; b < D; ++b)
-                        df(i*D+a, i*D+b) += K[a][b] / mss.masses()[i].mass;
+                        df(i*D + a, i*D + b) += K[a][b] / mss.masses()[i].mass;
             }
         }
         else if (c2.type == Connector::MASS)
@@ -315,13 +314,11 @@ virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const ov
             size_t j = c2.nr;
             for (int a = 0; a < D; ++a)
                 for (int b = 0; b < D; ++b)
-                    df(j*D+a, j*D+b) += K[a][b] / mss.masses()[j].mass;
+                    df(j*D + a, j*D + b) += K[a][b] / mss.masses()[j].mass;
         }
     }
 
-    // -------------------------------
     // 2. Distance constraints contributions
-    // -------------------------------
     for (size_t c = 0; c < nConstr; ++c)
     {
         auto distConst = mss.constraints()[c];
@@ -334,29 +331,22 @@ virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const ov
         double dist = norm(diff);
         if (dist < 1e-12) continue;
 
-        Vec<D> dir = (1.0 / dist) * diff;  // scalar on left
+        Vec<D> dir = (1.0 / dist) * diff;
 
-        // Constraint equations df/dx
+        // df/dx for constraints
         if (conn1.type == Connector::MASS)
-            for (int a = 0; a < D; ++a)
-                df(nMass*D + c, conn1.nr*D + a) = -dir.data()[a];
+            for (int a = 0; a < D; ++a){
+                df(nMass*D + c, conn1.nr*D + a) = -dir(a);               
+                df(conn1.nr*D + a, nMass*D + c) = dir(a) / mss.masses()[conn1.nr].mass;
+            }
 
         if (conn2.type == Connector::MASS)
-            for (int a = 0; a < D; ++a)
-                df(nMass*D + c, conn2.nr*D + a) = dir.data()[a];
-
-        // Accelerations w.r.t lambda df/dλ
-        if (conn1.type == Connector::MASS)
-            for (int a = 0; a < D; ++a)
-                df(conn1.nr*D + a, nMass*D + c) = dir.data()[a] / mss.masses()[conn1.nr].mass;
-
-        if (conn2.type == Connector::MASS)
-            for (int a = 0; a < D; ++a)
-                df(conn2.nr*D + a, nMass*D + c) = -dir.data()[a] / mss.masses()[conn2.nr].mass;
+            for (int a = 0; a < D; ++a){
+                df(nMass*D + c, conn2.nr*D + a) = dir(a);                
+                df(conn2.nr*D + a, nMass*D + c) = -dir(a) / mss.masses()[conn2.nr].mass;
+            }
     }
 }
-
-
 
 };
 
