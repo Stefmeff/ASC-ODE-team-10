@@ -6,18 +6,18 @@ parts:
     chapters:
 
       - file: odes/scope_and_tasks
-        title: "Project Scope and Tasks"
+        title: "1. Project Scope and Tasks"
         
       - file: odes/building
-        title: "4. Building the Project"        
+        title: "2. Building the Project"        
 
       - file: odes/FunctionAlgebra
-        title: "1. Function Algebra"
+        title: "3. Function Algebra"
 
       - file: odes/TimeSteppingMethods
-        title: "2. Time Stepping Methods"
+        title: "4. Time Stepping Methods"
 
       - file: odes/Applications
-        title: "3. Applications"
+        title: "5. Applications"
 
 

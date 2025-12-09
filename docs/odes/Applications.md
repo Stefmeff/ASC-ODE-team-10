@@ -1,4 +1,4 @@
-# 3. Applications:
+# 3. Applications
 
 In this chapter, we demonstrate the usage of our ODE library by simulating **mechanical and electrical systems**, simulating their temporal behaviour by numerically solving their underlying ODE's.
 
