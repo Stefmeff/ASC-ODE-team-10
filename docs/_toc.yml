@@ -7,18 +7,17 @@ parts:
 
       - file: odes/scope_and_tasks
         title: "Project Scope and Tasks"
+        
+      - file: odes/building
+        title: "4. Building the Project"        
 
       - file: odes/FunctionAlgebra
-        title: "Function Algebra Implementation"
+        title: "1. Function Algebra"
 
       - file: odes/TimeSteppingMethods
-        title: "Time Stepping Methods Implementation"
+        title: "2. Time Stepping Methods"
 
       - file: odes/Applications
-        title: "Numerical Results, plots and Discussion"
+        title: "3. Applications"
 
-      - file: odes/building
-        title: "Building the Project"
 
-      - file: odes/mass_spring
-        title: "Mass-spring notebook"

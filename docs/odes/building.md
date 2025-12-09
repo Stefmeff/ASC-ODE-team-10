@@ -26,12 +26,5 @@ git submodule update --init --recursive
 mkdir build
 cd build
 cmake ..
-make -j
+make 
 ```
-
-This will compile:
-
-- The ODE test driver: `test_ode` (from `demos/test_ode.cpp`),
-- The AD demo: `demo_autodiff`,
-- The electric network demo: `electric_ode`,
-- And any additional executables defined in `CMakeLists.txt`.
