@@ -28,7 +28,7 @@ language: en
 # --------------------------------------------------------------------
 execute:
   # Options: "auto", "force", "cache", "off"
-  execute_notebooks: "off"   # TODO: change to "auto" if you want notebooks re-run on build
+  execute_notebooks: "auto"   # TODO: change to "auto" if you want notebooks re-run on build
   timeout: 60
   allow_errors: false
   # If you later want to cache notebook execution:
@@ -56,8 +56,8 @@ html:
 # Repository information (for 'Edit this page', etc.)
 # --------------------------------------------------------------------
 repository:
-  url: "https://github.com/MoRasched/MoRasched.github.io"
-  path_to_book: ""       # book lives at repo root
+  url: "https://github.com/Stefmeff/ASC-ODE-team-10"
+  path_to_book: "docs"
   branch: "main"
 
 # --------------------------------------------------------------------

@@ -20,5 +20,5 @@ parts:
       - file: odes/building
         title: "Building the Project"
 
-      # - file: odes/results_and_plots
-      #   title: "Numerical Results and Discussion"
+      - file: odes/mass_spring
+        title: "Mass-spring notebook"
