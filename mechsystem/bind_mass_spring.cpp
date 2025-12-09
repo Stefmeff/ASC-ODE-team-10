@@ -54,8 +54,6 @@ PYBIND11_MODULE(mass_spring, m) {
       return Fix<2>{ { p[0], p[1] } };
     });
 
-
-    
     py::class_<Fix<3>> (m, "Fix3d")
       .def_property_readonly("pos",
                              [](Fix<3> & f) { return f.pos.data(); });
@@ -71,6 +69,13 @@ PYBIND11_MODULE(mass_spring, m) {
       .def(py::init<double, double, std::array<Connector,2>>())
       .def_property_readonly("connectors",
                              [](Spring & s) { return s.connectors; })
+      ;
+
+    //Add constraint:
+    py::class_<DistanceConstraint> (m, "DistanceConstraint")
+      .def(py::init<double, std::array<Connector,2>>())
+      .def_property_readonly("connectors",
+                             [](DistanceConstraint & c) { return c.connectors; })
       ;
 
     
@@ -97,9 +102,11 @@ PYBIND11_MODULE(mass_spring, m) {
       .def("add", [](MassSpringSystem<3> & mss, Mass<3> m) { return mss.addMass(m); })
       .def("add", [](MassSpringSystem<3> & mss, Fix<3> f) { return mss.addFix(f); })
       .def("add", [](MassSpringSystem<3> & mss, Spring s) { return mss.addSpring(s); })
+      .def("add", [](MassSpringSystem<3> & mss, DistanceConstraint c) { return mss.addDistanceConstraint(c); })
       .def_property_readonly("masses", [](MassSpringSystem<3> & mss) -> auto& { return mss.masses(); })
       .def_property_readonly("fixes", [](MassSpringSystem<3> & mss) -> auto& { return mss.fixes(); })
       .def_property_readonly("springs", [](MassSpringSystem<3> & mss) -> auto& { return mss.springs(); })
+      .def_property_readonly("constraints", [](MassSpringSystem<3> & mss) -> auto& { return mss.constraints(); })
       .def("__getitem__", [](MassSpringSystem<3> mss, Connector & c) {
         if (c.type==Connector::FIX) return py::cast(mss.fixes()[c.nr]);
         else return py::cast(mss.masses()[c.nr]);
