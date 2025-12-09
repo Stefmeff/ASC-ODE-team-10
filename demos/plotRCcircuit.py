@@ -1,32 +1,35 @@
 import numpy as np
 
 data = []
-
-
-steps = 100
-
-
-filename1 = f'../outputs/ElectricNetwork/ExplicitEuler/steps{steps}.txt'
-filename2 = f'../outputs/ElectricNetwork/ImplicitEuler/steps{steps}.txt'
-filename3 = f'../outputs/ElectricNetwork/CrankNicolson/steps{steps}.txt'   
-d1 = np.loadtxt(filename1, usecols=(0, 1, 2))
-d2 = np.loadtxt(filename2, usecols=(0, 1, 2))
-d3 = np.loadtxt(filename3, usecols=(0, 1, 2))
-data = [d1, d2, d3]
-
 import matplotlib.pyplot as plt
 
+for steps in [5, 50, 100, 150, 200, 20000]:
+    
 
-plt.plot(data[0][:,0], data[0][:,1], label='explicit Euler')
-plt.plot(data[1][:,0], data[1][:,1], label='implicit Euler')
-plt.plot(data[2][:,0], data[2][:,1], label='Crank-Nicolson')
-plt.xlabel('time')
-plt.ylabel('voltage U_c')
-plt.title('Electric Network Time Evolution')
-plt.legend()
-plt.grid()
-plt.savefig(f"../outputs/ElectricNetwork/plots/voltage_plot_steps{steps}.png")
-plt.clf()
+
+    filename1 = f'../outputs/ElectricNetwork/ExplicitEuler/steps:{steps}.txt'
+    filename2 = f'../outputs/ElectricNetwork/ImplicitEuler/steps:{steps}.txt'
+    filename3 = f'../outputs/ElectricNetwork/CrankNicolson/steps:{steps}.txt'   
+    d1 = np.loadtxt(filename1, usecols=(0, 1, 2))
+    d2 = np.loadtxt(filename2, usecols=(0, 1, 2))
+    d3 = np.loadtxt(filename3, usecols=(0, 1, 2))
+    data = [d1, d2, d3]
+
+
+
+
+    plt.plot(data[0][:,0], data[0][:,1], label='explicit Euler')
+    plt.plot(data[1][:,0], data[1][:,1], label='implicit Euler')
+    plt.plot(data[2][:,0], data[2][:,1], label='Crank-Nicolson')
+    plt.xlabel('time')
+    plt.ylabel('voltage U_c')
+    plt.title('Electric Network Time Evolution')
+    plt.legend()
+    plt.grid()
+    plt.savefig(f"../outputs/ElectricNetwork/plots/voltage_plot_steps{steps}.png")
+    plt.clf()
+
+steps = 20000
 
 # Implicit Runge Kutta method
 filename4 = f'../outputs/ElectricNetwork/ImplicitRungeKutta/stages:2steps:{steps}.txt'

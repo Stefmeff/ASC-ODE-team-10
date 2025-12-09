@@ -3,13 +3,13 @@ import numpy as np
 data = []
 
 
-for steps in [50, 100, 150, 200]:
+for steps in [5, 50, 100, 150, 200]:
     
 
-    filename1 = f'../outputs/MassSpring/ExplicitEuler/steps{steps}.txt'
-    filename2 = f'../outputs/MassSpring/ImprovedEuler/steps{steps}.txt'
-    filename3 = f'../outputs/MassSpring/ImplicitEuler/steps{steps}.txt'
-    filename4 = f'../outputs/MassSpring/CrankNicolson/steps{steps}.txt'
+    filename1 = f'../outputs/MassSpring/ExplicitEuler/steps:{steps}.txt'
+    filename2 = f'../outputs/MassSpring/ImprovedEuler/steps:{steps}.txt'
+    filename3 = f'../outputs/MassSpring/ImplicitEuler/steps:{steps}.txt'
+    filename4 = f'../outputs/MassSpring/CrankNicolson/steps:{steps}.txt'
     d1 = np.loadtxt(filename1, usecols=(0, 1, 2))
     d2 = np.loadtxt(filename2, usecols=(0, 1, 2))
     d3 = np.loadtxt(filename3, usecols=(0, 1, 2))
@@ -48,6 +48,7 @@ for steps in [50, 100, 150, 200]:
     plt.savefig(f"../outputs/MassSpring/plots/massspring_phase_steps{steps}.png")
     plt.clf()
 
+''''
 # Plot Implicit Runge Kutta methods
 filename5 = f'../outputs/MassSpring/ImplicitRungeKutta/stages:2steps:150.txt'
 filename6 = f'../outputs/MassSpring/ImplicitRungeKutta/stages:3steps:150.txt'
@@ -86,3 +87,4 @@ plt.legend()
 plt.grid()
 plt.savefig(f"../outputs/MassSpring/plots/ExpRunge_massspring_position_steps150.png")
 plt.clf()
+'''
