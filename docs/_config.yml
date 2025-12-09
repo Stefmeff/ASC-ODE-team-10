@@ -1,57 +1,101 @@
-# Book settings
-# Learn more at https://jupyterbook.org/customize/config.html
+################################################################################
+# Jupyter Book configuration for MoRasched.github.io
+# Inspired by JSchoeberl/IntroSC, adapted for ASC-ODE material
+################################################################################
 
-title: ASC-ODE
-author: Joe Smith
-logo: ASC_Logo_transparent_300ppi_RGB.png
-copyright : "2025"  # Copyright year to be placed in the footer
+# --------------------------------------------------------------------
+# Book metadata
+# --------------------------------------------------------------------
+title: "ASC-ODE  Introduction to Scientific Computing"
 
+# If you want multiple authors, use a list:
+authors:
+  - name: "Moritz Rasched"
+    affiliation: "ASC-ODE Team 10"
+  - name: "Stefan Moser"
+    affiliation: "ASC-ODE Team 10"
+  - name: "Jan Pup Csongor"
+    affiliation: "ASC-ODE Team 10"
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
+copyright: "2025"
+logo: ASC_Logo_transparent_300ppi_RGB.png   # put your logo file in the root folder        
+
+# The language of the book (for HTML lang attribute)
+language: en
+
+# --------------------------------------------------------------------
+# Execution configuration
+# --------------------------------------------------------------------
 execute:
-  execute_notebooks: force
-  timeout: 300
+  # Options: "auto", "force", "cache", "off"
+  execute_notebooks: "off"   # TODO: change to "auto" if you want notebooks re-run on build
+  timeout: 60
+  allow_errors: false
+  # If you later want to cache notebook execution:
+  # cache: "_build/.jupyter_cache"
 
-# Define the name of the latex output file for PDF builds
-latex:
-  latex_documents:
-    targetname: book.tex
-
-# Add a bibtex file so that we can create citations
-bibtex_bibfiles:
-  - references.bib
-
-# Information about where the book exists on the web
-repository:
-  url: https://github.com/JSchoeberl/IntroSC.git
-#  url: https://github.com/executablebooks/jupyter-book  # Online location of your book
-#  path_to_book: docs  # Optional path to your book, relative to the repository root
-#  branch: master  # Which branch of the repository should be used when creating links (optional)
-
-# Add GitHub buttons to your book
-# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+# --------------------------------------------------------------------
+# HTML options and theme behavior
+# --------------------------------------------------------------------
 html:
-  use_issues_button: false
+  favicon: ASC_Logo_transparent_300ppi_RGB.png   # optional, use same file as logo or remove
+  use_edit_page_button: true
   use_repository_button: true
+  use_issues_button: true
+  # clean navbar/footer; you can customize later if you like
+  extra_navbar: ""
+  extra_footer: "Documentation for the ASC-ODE project (Team 10, TU Wien)"
 
+  # You can tweak theme options here if desired
+  # theme:
+  #   name: "sphinx_book_theme"
+  #   options:
+  #     navigation_with_keys: true
 
-# parse:
-#  myst_enable_extensions:
-#    # don't forget to list any other extensions you want enabled,
-#    # including those that are enabled by default! See here: https://jupyterbook.org/en/stable/customize/config.html
-#    - html_image
+# --------------------------------------------------------------------
+# Repository information (for 'Edit this page', etc.)
+# --------------------------------------------------------------------
+repository:
+  url: "https://github.com/MoRasched/MoRasched.github.io"
+  path_to_book: ""       # book lives at repo root
+  branch: "main"
 
+# --------------------------------------------------------------------
+# Launch buttons (optional: Binder / JupyterHub, etc.)
+# --------------------------------------------------------------------
+# launch_buttons:
+#   binderhub_url: ""      # e.g.: "https://mybinder.org"
+#   notebook_interface: "jupyterlab"
+#   colab_url: ""          # e.g.: "https://colab.research.google.com"
 
+# --------------------------------------------------------------------
+# References / bibliography (optional)
+# --------------------------------------------------------------------
+#bibtex_bibfiles: []   # Add a references.bib file in the repo if you want citations
 
-parse:
-  myst_enable_extensions:
-#    # don't forget to list any other extensions you want enabled,
-#    # including those that are enabled by default! See here: https://jupyterbook.org/en/stable/customize/config.html
-    - html_image
-    - dollarmath
-    - amsmath
-    - linkify
-    - colon_fence
-  myst_dmath_double_inline: true
-  
+# --------------------------------------------------------------------
+# Sphinx configuration extensions (you can expand later)
+# --------------------------------------------------------------------
+sphinx:
+  config:
+    # Numbered sections, like in a textbook
+    numfig: true
+    html_show_copyright: false
+    html_show_sourcelink: false
+    # Enable MyST features similar to IntroSC
+    myst_enable_extensions:
+      - colon_fence
+      - deflist
+      - dollarmath
+      - html_image
+      - linkify
+      - substitution
+
+################################################################################
+# Notes:
+# - Content will be controlled by _toc.yml and Markdown/Notebook files.
+# - Repos with code:
+#     * ASC-ODE C++ package: https://github.com/Stefmeff/ASC-ODE-team-10
+#     * Numerical Computing notebooks: https://github.com/MoRasched/NC
+#   You can link to them from your Markdown pages.
+################################################################################

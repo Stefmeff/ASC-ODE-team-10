@@ -1,11 +1,24 @@
-# Table of contents
-# Learn more at https://jupyterbook.org/customize/toc.html
-
 format: jb-book
-root: intro.md
+root: intro   # intro.md is your landing page
 
+parts:
+  - caption: ASC-ODE  Team 10
+    chapters:
 
+      - file: odes/scope_and_tasks
+        title: "Project Scope and Tasks"
 
+      - file: odes/FunctionAlgebra
+        title: "Function Algebra Implementation"
 
+      - file: odes/TimeSteppingMethods
+        title: "Time Stepping Methods Implementation"
 
+      - file: odes/Applications
+        title: "Numerical Results, plots and Discussion"
 
+      - file: odes/building
+        title: "Building the Project"
+
+      # - file: odes/results_and_plots
+      #   title: "Numerical Results and Discussion"
