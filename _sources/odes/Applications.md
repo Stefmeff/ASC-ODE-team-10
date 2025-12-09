@@ -1,10 +1,11 @@
-# 3. Applications:
+# 3. Applications
 
-In the following chapter we will demonstrate the usage of the library using examples of different mechanical and electrical systems, simulating their temporal behaviour by numerically solving their underlying ODE's.
+In this chapter, we demonstrate the usage of our ODE library by simulating **mechanical and electrical systems**, simulating their temporal behaviour by numerically solving their underlying ODE's.
+
 
 ## 3.1 Mass-Spring System
 
-As a first example we look at a simple mechanical system: a mass that is attached to a spring. We can desribe the system by the ODE:
+We start with a **simple mechanical system**: a mass attached to a spring. Using Newton’s law:
 $$my''(t) = -ky(t)$$
 where **m** is the mass, **k** the stiffness of the spring, and *y(t)* the displacement of the mass.  We express this relationship as a first order system:
 
@@ -44,7 +45,7 @@ As one can see in the plots above, low stepsizes lead to really rough approximat
 
 ## 3.2 Electronic Circuit
 
-As a second example we look at a simple RC circuit. By Kirchhoff's voltage law, the voltage $U(t)$ across the capacitor satisfies:
+As a second example we look at a simple RC circuit. By Kirchhoff's law, the voltage $U_C(t)$ across the capacitor satisfies:
 
 $$RC\frac{dU_C}{dt} + U_C(t) = U_0(t)$$
 
@@ -52,8 +53,9 @@ where **R** is the resistance, **C** is the capacitance, and $U_0(t)$ is the inp
 
 $$\frac{dU_C}{dt} = \frac{1}{RC}(U_0(t) - U_C(t))$$
 
+<p align="center">
 <img src="plots/ElectricCircuit/RC_Circuit.png" width="30%" style="display:block; margin:auto;">
-
+</p>
 
 
 The system is implemented in `demos/test_ode.cpp` as the `ElectricNetwork` class. Parameters are set to $R=C=1$ and the input voltage is $U_0(t) = \cos(100\pi t)$. Since the RC-circuit implements a low pass filter, we expect high-frequent input signals to decrease in amplitude at the output. We simulate the systems behaviour again by calling:
@@ -107,6 +109,86 @@ If we execute `plotlegendre.py` we can view the legendre Polynomials up to order
 <img src="plots/Legendre/legendre_polynomials.png" width="100%"> | <img src="plots/Legendre/legendre_polynomials_derivatives.png" width="100%">
 
 
-## 3.4 Mass-Spring Pendulum
 
-TODO:
+
+
+
+
+# 3.4 Mass-Spring Pendulum
+
+For this example, we want to simulate the behaviour of mass-spring systems, where point masses are connected to each other with springs or mass-less sticks. For this we utilize the class `MassSpringSystem` implemented in `mechsystem/mass_spring.cpp`. This class represents a mechanical system of interconnected point masses and fix points. The class `MSS_Functions` implements the right-hand-side function for the mass-spring system and can be used to numerically approximate and simulate the systems behaviour.
+
+To calculate the forces on the point masses **$m_i$** with position $x_i(t)$, we first consider the potential energy **U(x)**:
+$$\sum_i m_i\,g x_{i,z},$$
+
+For the energy stored in the spring $k_ij$ connecting point masses $m_i$ and $m_j$ we get:
+
+$$\sum_{k_{ij}} \frac{1}{2} k_{ij} ( |x_i - x_j | - l_{ij} )^2,
+$$
+
+The force acting on a mass can then be expressed as:
+$$
+F_i := -\frac{\partial U}{\partial x_i}(x)
+$$
+
+Dividing the force my the mass gives us the accelleration. If we assume mass-less sticks of length **l** connecting the point masses, we get the following constraint:
+$$
+0 = g(x) := | x - x_0 | - l,
+$$
+We can then define the Lagrange function:
+$$
+L(x, \lambda) = -U(x) + \left< \lambda , g(x) \right>
+$$
+and derive the equation:
+$$\begin{aligned}
+m_i\ddot x_i &= \frac{\partial}{\partial x_i} L(x, \lambda) \\
+0 &= \nabla_\lambda L(x, \lambda)
+\end{aligned}$$
+
+We can then define such mechinal systems like this:
+
+```cpp
+MassSpringSystem<2> mss;
+mss.setGravity( {0,-9.81} );
+auto fA = mss.addFix( { { 0.0, 0.0 } } );
+auto mA = mss.addMass( { 1, { 1.0, 0.0 } } );
+auto mB = mss.addMass( { 1, { 2.0, 0.0 } } );
+
+mss.add (Spring(1, 20000, (fA, mA)))
+mss.add (DistanceConstraint(1,(mA,mB)))
+```
+By again implementing the right-hand side function of the mass spring system as  a `NonlinearFunction` in `MSS_Functions`, allows us to use numerical methods to approximate the systems behaviour.
+
+```cpp
+template <int D>
+class MSS_Function : public NonlinearFunction
+{
+  MassSpringSystem<D> & mss;
+public:
+  MSS_Function (MassSpringSystem<D> & _mss)
+    : mss(_mss) { }
+
+  virtual size_t dimX() const override;
+  virtual size_t dimF() const override;
+
+  virtual void evaluate(VectorView<double> x, VectorView<double> f) const override;
+  virtual void evaluateDeriv(VectorView<double> x, MatrixView<double> df) const override;
+}
+
+```
+
+
+**Double Pendulum** | **Spring Chain:**
+:---:|:---:
+<img src="plots/Pendulum/DoublePendulum.gif" width="100%"> | <img src="plots/Pendulum/ChainPendulum.gif" width="75%">
+
+TODO: Simulate other more complicated constructs using distance constraints via Lagrange multipliers.
+
+
+
+
+
+
+
+
+

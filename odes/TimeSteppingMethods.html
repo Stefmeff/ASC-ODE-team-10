@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>2. Time Stepping Methods &#8212; ASC-ODE  Introduction to Scientific Computing</title>
   
@@ -28,42 +29,46 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'odes/TimeSteppingMethods';</script>
-    <link rel="icon" href="../_static/ASC_Logo_transparent_300ppi_RGB.png"/>
+    <link rel="shortcut icon" href="../_static/ASC_Logo_transparent_300ppi_RGB.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Applications:" href="Applications.html" />
+    <link rel="next" title="3. Applications" href="Applications.html" />
     <link rel="prev" title="1. Function Algebra" href="FunctionAlgebra.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -161,18 +166,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -184,11 +178,12 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ASC-ODE  Team 10</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="scope_and_tasks.html">Project Scope and Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="FunctionAlgebra.html">Function Algebra Implementation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Time Stepping Methods Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Applications.html">Numerical Results, plots and Discussion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Building the Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scope_and_tasks.html">1. Project Scope and Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">2. Building the Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FunctionAlgebra.html">3. Function Algebra</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Time Stepping Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Applications.html">3. Applications</a></li>
+
 </ul>
 
     </div>
@@ -218,9 +213,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -243,7 +238,7 @@
       
       
       
-      <li><a href="https://github.com/MoRasched/MoRasched.github.io" target="_blank"
+      <li><a href="https://github.com/Stefmeff/ASC-ODE-team-10" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -260,7 +255,7 @@
       
       
       
-      <li><a href="https://github.com/MoRasched/MoRasched.github.io/edit/main/odes/TimeSteppingMethods.md" target="_blank"
+      <li><a href="https://github.com/Stefmeff/ASC-ODE-team-10/edit/main/docs/odes/TimeSteppingMethods.md" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -277,7 +272,7 @@
       
       
       
-      <li><a href="https://github.com/MoRasched/MoRasched.github.io/issues/new?title=Issue%20on%20page%20%2Fodes/TimeSteppingMethods.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/Stefmeff/ASC-ODE-team-10/issues/new?title=Issue%20on%20page%20%2Fodes/TimeSteppingMethods.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -378,9 +373,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -418,7 +413,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="time-stepping-methods">
-<h1>2. Time Stepping Methods<a class="headerlink" href="#time-stepping-methods" title="Link to this heading">#</a></h1>
+<h1>2. Time Stepping Methods<a class="headerlink" href="#time-stepping-methods" title="Permalink to this heading">#</a></h1>
 <p>The application implements various time-stepping methods used for finding approximate solutions to ODE’s found in <code class="docutils literal notranslate"><span class="pre">src/timestepper.hpp</span></code>. Time stepping advances an ODE solution from time steps <span class="math notranslate nohighlight">\(t_n\)</span> to <span class="math notranslate nohighlight">\(t_{n+1}=t_n+\tau\)</span> by approximating the RHS <span class="math notranslate nohighlight">\(f(y)\)</span>. Our steppers share a common interface <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code>, which stores the RHS as a <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> and provides <code class="docutils literal notranslate"><span class="pre">doStep</span></code> function to calculate the next time step.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TimeStepper</span>
 <span class="p">{</span>
@@ -433,7 +428,7 @@ document.write(`
 </div>
 <p>The following subchapters explain the idea and concrete implementation of various time-stepping methods like Explicit/Implicit Euler, Crank Nicolson, Runge-Kutta etc.</p>
 <section id="explicit-euler-method">
-<h2>2.1 Explicit Euler Method<a class="headerlink" href="#explicit-euler-method" title="Link to this heading">#</a></h2>
+<h2>2.1 Explicit Euler Method<a class="headerlink" href="#explicit-euler-method" title="Permalink to this heading">#</a></h2>
 <p>The Explicit Euler method is a numerical scheme for solving ordinary differential equations (ODEs) of the form:</p>
 <div class="math notranslate nohighlight">
 \[\frac{dy}{dt} = f(y(t)), \quad y(0) = y_0, \quad \forall t \in [0,T]\]</div>
@@ -458,7 +453,7 @@ document.write(`
 </div>
 </section>
 <section id="improved-euler-method">
-<h2>2.2 Improved Euler Method<a class="headerlink" href="#improved-euler-method" title="Link to this heading">#</a></h2>
+<h2>2.2 Improved Euler Method<a class="headerlink" href="#improved-euler-method" title="Permalink to this heading">#</a></h2>
 <p>Improved Euler is based on Explicit Euler but tries to achieve better accuracy by approximating the midpoint:</p>
 <div class="math notranslate nohighlight">
 \[ \tilde{y} = y_n+\tfrac{\tau}{2}f(y_n)\]</div>
@@ -479,7 +474,7 @@ document.write(`
 </div>
 </section>
 <section id="implicit-euler-method">
-<h2>2.3 Implicit Euler Method<a class="headerlink" href="#implicit-euler-method" title="Link to this heading">#</a></h2>
+<h2>2.3 Implicit Euler Method<a class="headerlink" href="#implicit-euler-method" title="Permalink to this heading">#</a></h2>
 <p>Implicit Euler uses the future state in the slope to achieve more accurate results:</p>
 <div class="math notranslate nohighlight">
 \[y_{n+1} = y_n + \tau \, f(y_{n+1})\]</div>
@@ -504,7 +499,7 @@ document.write(`
 </div>
 </section>
 <section id="crank-nicolson">
-<h2>2.4 Crank Nicolson<a class="headerlink" href="#crank-nicolson" title="Link to this heading">#</a></h2>
+<h2>2.4 Crank Nicolson<a class="headerlink" href="#crank-nicolson" title="Permalink to this heading">#</a></h2>
 <p>Crank–Nicolson is another implicit time-stepping method, averaging the derivatives at the current next time step:</p>
 <div class="math notranslate nohighlight">
 \[y_{n+1} = y_n + \frac{\tau}{2}\bigl(f(y_n) + f(y_{n+1})\bigr)\]</div>
@@ -534,7 +529,7 @@ document.write(`
 </div>
 </section>
 <section id="explicit-runge-kutta-for-arbitrary-butcher-tableaus">
-<h2>2.5 Explicit Runge-Kutta for Arbitrary Butcher Tableaus<a class="headerlink" href="#explicit-runge-kutta-for-arbitrary-butcher-tableaus" title="Link to this heading">#</a></h2>
+<h2>2.5 Explicit Runge-Kutta for Arbitrary Butcher Tableaus<a class="headerlink" href="#explicit-runge-kutta-for-arbitrary-butcher-tableaus" title="Permalink to this heading">#</a></h2>
 <p>Explicit Runge–Kutta generalizes single-step methods using a Butcher tableau with stages <span class="math notranslate nohighlight">\(s\)</span>, coefficients <span class="math notranslate nohighlight">\(a_{ij}\)</span>, <span class="math notranslate nohighlight">\(b_j\)</span>, and nodes <span class="math notranslate nohighlight">\(c_j\)</span>. Each stage computes a slope <span class="math notranslate nohighlight">\(k_j\)</span> using weighted combinations of prior stages:</p>
 <div class="math notranslate nohighlight">
 \[k_j = f\left(y_n + \tau\sum_{l=1}^{j-1}a_{jl}k_l\right), \quad y_{n+1} = y_n + \tau\sum_{j=1}^{s}b_j k_j\]</div>
@@ -614,7 +609,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3. Applications:</p>
+        <p class="prev-next-title">3. Applications</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

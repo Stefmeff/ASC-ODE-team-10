@@ -1,64 +1,26 @@
 # Welcome to ASC-ODE's documentation!
 
 
-ASC-ODE is is a C++ library for solving ordinary differential equations (ODEs).
-The equation is defined by the right hand side function.
-ASC-ODE provides various time-steppers which may be used for odes with right hand sides
-given by a function object.
+A C++ package for solving ordinary differential equations (ODEs), developed in the context of the Numerical Simulation and Scientific Computing I course by Prof. Joachim Schöberl at TU Wien.
 
-A small demo for solving a mass-spring model as first order ODE
-\begin{eqnarray*}
-y_0^\prime & = & y_1 \\
-y_1^\prime & = & -\frac{k}{m} y_0
-\end{eqnarray*}
-is here:
+This repository is a **Team 10 fork** of the upstream project [ASC-ODE](https://github.com/Stefmeff/ASC-ODE-team-10). 
 
-```cpp
-double tend = 4*M_PI;
-int steps = 100;
-double tau = tend/steps;
+The repository contains:
 
-Vector<> y = { 1, 0 };  // initial conditions
-shared_ptr<NonlinearFunction> rhs = std::make_shared<MassSpring>(mass, stiffness);
-  
-ExplicitEuler stepper(rhs);
+- Time-stepping schemes for ODEs (Euler variants, implicit Runge–Kutta),
+- Model problems (mass–spring system and RC circuit / electric network),
+- An automatic differentiation module,
+- Plotting scripts and generated plots under `outputs/` and `outputs/plots/`.
 
-std::cout << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
-for (int i = 0; i < steps; i++)
-  {
-     stepper.DoStep(tau, y);
-     std::cout << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
-  }
-```    
+---
 
-The result of this simulation in phase space is shown here:
+## Team
 
-```{image} pictures/massspring_phase.png
-:width: 40%
-:align: center
-```
+We are **Team 10**.
 
-
-
-
-## Installation
-
-install XXX-odesolver it via git-clone:
-
-    git clone https://github.com/my-github-clone/my-ode-solver.git
-
-
-To configure and build some tests do
-
-    cd my-ode-solver
-    mkdir build
-    cd build
-    cmake ..
-    make
-    
-
-## Available time-stepping methods are
-...
+- *Stefan Moser* – `<e12025955@tuwien.ac.at>`
+- *Jan Pup Csongor* – `<email2@tuwien.ac.at>`
+- *Adam Moritz Rasched* – `<e01644619@student.tuwien.ac.at>`
 
 
 
