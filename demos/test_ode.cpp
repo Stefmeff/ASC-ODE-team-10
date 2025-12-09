@@ -2,10 +2,17 @@
 
 #include <iostream>
 #include <fstream> 
+#include <getopt.h>
+#include <stdlib.h>
+#include <cstdlib>
+#include <filesystem>
+
 
 #include <nonlinfunc.hpp>
 #include <timestepper.hpp>
 #include <implicitRK.hpp>
+#include <filesystem>
+#include <iostream>
 
 using namespace ASC_ode;
 
@@ -51,7 +58,7 @@ public:
         : resistance(R), capacitance(C) 
     {
         // 100 * PI is the angular frequency (omega)
-        angularFrequency = 100.0 * M_PI;
+        angularFrequency = 100 * M_PI;
     }
 
     size_t dimX() const override { return 2; }
@@ -95,43 +102,65 @@ public:
 
 int main(int argc, char** argv)
 {
-  // Usage: ./test_ode [System] [Method] [num_stages]
-  // System: MassSpring, ElectricNetwork
-  // Method: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson, RungeKutta, ImplicitRungeKutta
-  // For ImplicitRungeKutta, num_stages specifies the number of stages
+  // Usage: ./test_ode [--system <type>] [--method <name>] [--stages N]
+  // -s: MassSpring, ElectricNetwork
+  // -m: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson, ExpRungeKutta, ImpRungeKutta
+  // -k: Number of stages for Runge-Kutta methods
 
-  //Read command line argument: ExplicitEuler, ImplicitEuler, ImprovedEuler, CrankNicolson
+  //arguments:
   std::string system;
   std::string method;
   int num_stages = 2; // default number of stages for RK methods
 
-  if (argc == 4 ) {
-      system = argv[1];
-      method = argv[2];
-      num_stages = std::stoi(argv[3]);
-  } else if (argc = 3 ) {
-      system = argv[1];
-      method = argv[2];
-  } else if (argc == 2 ) {
-      system = argv[1];
-      method = "ExplicitEuler"; // default method
-  } else {
-      system = "MassSpring"; // default system
-      method = "ExplicitEuler"; // default method
+  //PARSE COMMAND LINE OPTIONS:
+  static struct option long_options[] = {
+      {"system", required_argument, 0, 's'},
+      {"method", required_argument, 0, 'm'},
+      {"stages", required_argument, 0, 'k'}, 
+      {0, 0, 0, 0}
+  };
+
+  int opt;
+  while ((opt = getopt_long(argc, argv, "s:m:k:", long_options, NULL)) != -1) {
+      switch (opt) {
+      case 's':
+          system = optarg;
+          break;
+      case 'm':
+          method = optarg;
+          break;
+      
+      case 'k':
+          num_stages = atoi(optarg);
+          break;
+      default:
+          fprintf(stderr,
+              "Usage: %s --system <type> --method <name> [--stages N]\n", argv[0]);
+          exit(EXIT_FAILURE);
+      }   
   }
+
+  //Initial Conditions
+  Vector<> y = {1.0, 0.0};  // initializer list
+  double tend = 4*M_PI;
+  int steps[] = {5, 50, 100, 150, 200, 20000};
 
   //Select System: Electrical vs Mechanical
   std::shared_ptr<NonlinearFunction> rhs;
   if(system == "ElectricNetwork") {
+    //ELECTRIC NETWORK
     std::cout << "Using Electric Network System" << std::endl;
     rhs = std::make_shared<ElectricNetwork>(1.0,1.0); // R=1kOhm, C=1uF
+    tend = 1;
   }else{
+    //MASS SPRING SYSTEM
     std::cout << "Using Mass-Spring System" << std::endl;
     rhs = std::make_shared<MassSpring>(1.0, 1.0);
+    system = "MassSpring";
   }
 
   std::unique_ptr<TimeStepper> stepper;
-  std::string path;
+  
 
   Vector<> Radau(3), RadauWeight(3);
   GaussRadau(Radau, RadauWeight);
@@ -143,6 +172,9 @@ int main(int argc, char** argv)
 
   Matrix<> a(num_stages, num_stages);
   Vector<> b(num_stages), c(num_stages);
+
+  
+
   if(num_stages == 2) {
     auto [Gauss_2a, Gauss_2b] = computeABfromC(Gauss2c);
     std::cout << "Gauss2c = " << Gauss2c << ", b = " << Gauss_2b << ", a = " << Gauss_2a << std::endl;
@@ -165,28 +197,30 @@ int main(int argc, char** argv)
     a = a_temp;
     b = b_temp;
   }
+  std::string path;
  
-
-
-
-  // Select Time Stepping Method
+  //SELECT TIME STEPPING METHOD:
   if (method=="ImprovedEuler") 
   {
     std::cout << "Using Improved Euler Method" << std::endl;
     stepper = std::make_unique<ImprovedEuler>(rhs);
     path = "../outputs/" + system + "/ImprovedEuler/";
+
   } else if (method=="CrankNicolson") {
     std::cout << "Using Crank-Nicolson Method" << std::endl;
     stepper = std::make_unique<CrankNicolson>(rhs);
     path = "../outputs/" + system + "/CrankNicolson/";
+
   } else if (method=="ImplicitEuler") {     
     std::cout << "Using Implicit Euler Method" << std::endl;
     stepper = std::make_unique<ImplicitEuler>(rhs);
     path = "../outputs/" + system + "/ImplicitEuler/";
+
   } else if(method == "ExpRungeKutta") {
     std::cout << "Using Runge Kutta Method: " << path << std::endl;
     stepper = std::make_unique<RungeKutta>(rhs, a, b, c);
     path = "../outputs/" + system + "/ExplicitRungeKutta/stages:" + std::to_string(num_stages);
+    
   } else if(method=="ImpRungeKutta") {
     std::cout << "Using Implicit Runge Kutta: " << path << std::endl;
     auto [Gauss3a,Gauss3b] = computeABfromC (Gauss3c);
@@ -198,39 +232,18 @@ int main(int argc, char** argv)
     path = "../outputs/" + system + "/ExplicitEuler/";
   } 
 
-  double tend = 4*M_PI;
-  int steps[] = {50, 100, 150, 200};
 
-  // Gauss3c .. points tabulated, compute a,b:
-  //ImplicitRungeKutta stepper(rhs, Gauss3a, Gauss3b, Gauss3c);
+  //clear output directory at path
 
-
-  /*
-  // arbitrary order Gauss-Legendre
-  int stages = 5;
-  Vector<> c(stages), b1(stages);
-  GaussLegendre(c, b1);
-
-  auto [a, b] = computeABfromC(c);
-  ImplicitRungeKutta stepper(rhs, a, b, c);
-  */
-
-  /* 
-  // arbitrary order Radau
-  int stages = 5;
-  Vector<> c(stages), b1(stages);
-  GaussRadau(c, b1);
-
-  auto [a, b] = computeABfromC(c);
-  ImplicitRungeKutta stepper(rhs, a, b, c);
-  */
-
-
+  
+  //SIMULATION LOOP:
   for (int s : steps){
 
     double tau = tend/s;
 
-    Vector<> y = { 1, 0 };  // initializer list
+    y = (system == "ElectricNetwork") ? Vector<>({0.0, 0.0}) : Vector<>({1.0, 0.0}); // reset initial conditions
+
+    printf("Simulating with %d steps, tau=%f\n", s, tau);
     std::ofstream outfile (path + "steps:" + std::to_string(s) + ".txt");
 
 
@@ -245,10 +258,4 @@ int main(int argc, char** argv)
       outfile << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
     }
   }
-
-  //TODOS:
-  // build and run examples in mass_spring directory
-  // understand the setup
-  // add distance constraints to the MassSrping system => Enforce using Lagrange Multipliers???
-
 }
